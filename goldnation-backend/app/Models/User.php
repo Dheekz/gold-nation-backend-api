@@ -10,7 +10,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens;
     use HasFactory;
@@ -25,11 +25,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
-        'profession',
         'email',
-        'username',
-        'roles',
-        'phone',
         'password',
     ];
 
@@ -52,9 +48,8 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'created_at' => 'datetime:Y-m-d H:m:s',
-        'updated_at' => 'datetime:Y-m-d H:m:s'
     ];
+
     /**
      * The accessors to append to the model's array form.
      *
@@ -63,9 +58,4 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
-
-    public function transactions()
-    {
-        return $this->hasMany(Transaction::class, 'users_id', 'id');
-    }
 }
